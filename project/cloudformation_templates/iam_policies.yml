@@ -50,13 +50,7 @@ Resources:
               Condition:
                 StringEquals:
                     s3:ExistingObjectTag/Stage: "ObfuscatedReportReady"
-            - Sid: AnalyticsSQSAccess
-              Effect: Allow
-              Action: [
-                  "sqs:PutMessage"
-              ]
-              Resource: 
-                - 'arn:aws:sqs:us-east-2::analytics-queue'
+
   FinanceIAMPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
@@ -69,13 +63,7 @@ Resources:
               Effect: Allow
               Action: ["aws-portal:ViewBilling"]
               Resource: '*'
-            - Sid: S3FinanceObjectsByUserAccess
-              Effect: Allow
-              Action: ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"]
-              Resource: 'arn:aws:s3:::legacy-developer-bucket-${AWS::AccountId}/*'
-              Condition:
-                StringEquals:
-                    s3:ExistingObjectTag/Owner: "${aws:username}"
+          
   DeveloperIAMPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
@@ -126,11 +114,7 @@ Resources:
               - "sns:Get*"
               - "sns:List*"
             Resource: '*'
-          - Sid: DeveloperWebhookPermissions
-            Effect: Allow
-            Action:
-              - "sns:Publish"
-            Resource: !Sub 'arn:aws:sns:us-east-2:${AWS::AccountId}:developer-webhooks'
+          
   RestrictionsIAMPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
@@ -154,12 +138,6 @@ Resources:
                   - "us-east-2"
                   - "us-west-1"
                   - "us-west-2"
-          - Sid: "DenyS3Resources"
-            Effect: Deny
-            Resource:
-              - "arn:aws:s3:::*"
-            Action:
-              - "s3:*"
   BadIAMPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
